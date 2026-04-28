@@ -93,9 +93,10 @@ function Contact() {
         </Field>
         <button
           type="submit"
-          className="rounded-sm bg-primary px-8 py-4 text-xs uppercase tracking-[0.2em] text-primary-foreground transition-colors hover:bg-accent"
+          disabled={submitting}
+          className="rounded-sm bg-primary px-8 py-4 text-xs uppercase tracking-[0.2em] text-primary-foreground transition-colors hover:bg-accent disabled:opacity-60"
         >
-          Send message
+          {submitting ? "Sending…" : "Send message"}
         </button>
       </form>
     </section>
