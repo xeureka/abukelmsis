@@ -51,10 +51,10 @@ function Home() {
                 Shop the edition
               </a>
               <Link
-                to="/about"
+                to="/order"
                 className="inline-flex items-center text-xs uppercase tracking-[0.2em] text-foreground underline-offset-4 hover:underline"
               >
-                Inside the atelier →
+                Track your order →
               </Link>
             </div>
           </div>
