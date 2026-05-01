@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { categorySlugs, products } from "@/lib/products";
+import { products } from "@/lib/products";
 
 export const Route = createFileRoute("/categories")({
   head: () => ({
@@ -43,8 +43,7 @@ function CategoriesPage() {
           return (
             <Link
               key={category}
-              to="/categories/$slug"
-              params={{ slug: categorySlugs[category] ?? category }}
+              to="/shop"
               className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-accent"
             >
               {cover && (
