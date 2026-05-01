@@ -43,7 +43,8 @@ function CategoriesPage() {
           return (
             <Link
               key={category}
-              to="/shop"
+              to="/categories/$slug"
+              params={{ slug: categorySlugs[category] ?? category }}
               className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-accent"
             >
               {cover && (
