@@ -26,8 +26,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const pickYourPreference = products.slice(0, 8);
   const handpicked = products.slice(0, 4);
+  const categoryCards = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const p of products) if (!map.has(p.category)) map.set(p.category, p.image);
+    return Array.from(map.entries()).map(([category, image]) => ({
+      category,
+      image,
+      slug: categorySlugs[category] ?? category,
+    }));
+  }, []);
 
   return (
     <>
