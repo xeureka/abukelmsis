@@ -7,6 +7,7 @@ import p6 from "@/assets/product-06.jpg";
 import p7 from "@/assets/product-07.jpg";
 import p8 from "@/assets/product-08.jpg";
 import p9 from "@/assets/product-09.jpg";
+import pGabi from "@/assets/product-gabi.jpg";
 
 export type Product = {
   id: string;
