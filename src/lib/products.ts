@@ -110,6 +110,24 @@ export const products: Product[] = [
     image: p6,
     description: "የበዓል ሥጦታ — curated gift set.",
   },
+  {
+    id: "item-11",
+    name: "Gabi Netela 1",
+    category: "Gabi Netela",
+    price: 2800,
+    stock: 6,
+    image: pGabi,
+    description: "ጋቢ ነጠላ — handwoven cotton shawl with embroidered tibeb border.",
+  },
+  {
+    id: "item-12",
+    name: "Gabi Netela 2",
+    category: "Gabi Netela",
+    price: 3000,
+    stock: 5,
+    image: pGabi,
+    description: "ጋቢ ነጠላ — traditional Ethiopian handwoven netela.",
+  },
 ];
 
 export const formatPrice = (n: number) =>
