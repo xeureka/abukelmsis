@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-store";
-import { formatPrice } from "@/lib/products";
+
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
@@ -19,7 +19,7 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const [hydrated, setHydrated] = useState(false);
   const items = useCart((s) => s.items);
-  const subtotal = useCart((s) => s.subtotal());
+  
   const clear = useCart((s) => s.clear);
 
   const [name, setName] = useState("");
