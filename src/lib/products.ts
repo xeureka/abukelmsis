@@ -12,6 +12,16 @@ import gabi2 from "@/assets/gabi-02.jpg";
 import gabi3 from "@/assets/gabi-03.jpg";
 import gabi4 from "@/assets/gabi-04.jpg";
 import gabi5 from "@/assets/gabi-05.jpg";
+import shopCrossSet from "@/assets/shop-cross-set.jpg";
+import shopGabi6 from "@/assets/shop-gabi-06.jpg";
+import shopGabi7 from "@/assets/shop-gabi-07.jpg";
+import shopGabi8 from "@/assets/shop-gabi-08.jpg";
+import shopGabi9 from "@/assets/shop-gabi-09.jpg";
+import shopGabi10 from "@/assets/shop-gabi-10.jpg";
+import shopRussianIcons from "@/assets/shop-russian-icons.jpg";
+import shopProcessionalCross from "@/assets/shop-processional-cross.jpg";
+import shopSaintSet from "@/assets/shop-saint-set.jpg";
+import shopRobe from "@/assets/shop-robe.jpg";
 
 export type Product = {
   id: string;
@@ -158,6 +168,96 @@ export const products: Product[] = [
     stock: 6,
     image: gabi5,
     description: "ጋቢ ነጠላ — soft white netela with bright green tibeb border.",
+  },
+  {
+    id: "gabi-06",
+    name: "ጋቢ ነጠላ — Pink Tibeb Box",
+    category: "Gabi Netela",
+    price: 3000,
+    stock: 5,
+    image: shopGabi6,
+    description: "ጋቢ ነጠላ — handwoven white netela with pink tibeb border, gift-boxed.",
+  },
+  {
+    id: "gabi-07",
+    name: "ጋቢ ነጠላ — Rose Diamond",
+    category: "Gabi Netela",
+    price: 3100,
+    stock: 5,
+    image: shopGabi7,
+    description: "ጋቢ ነጠላ — soft white netela with rose diamond tibeb edge.",
+  },
+  {
+    id: "gabi-08",
+    name: "ጋቢ ነጠላ — Lime Tibeb",
+    category: "Gabi Netela",
+    price: 3000,
+    stock: 5,
+    image: shopGabi8,
+    description: "ጋቢ ነጠላ — white netela with vibrant lime green tibeb border.",
+  },
+  {
+    id: "gabi-09",
+    name: "ጋቢ ነጠላ — Ethiopian Flag",
+    category: "Gabi Netela",
+    price: 3500,
+    stock: 4,
+    image: shopGabi9,
+    description: "ጋቢ ነጠላ — handwoven netela with green, yellow and red tibeb stripe.",
+  },
+  {
+    id: "gabi-10",
+    name: "ጋቢ ነጠላ — Royal Tilet",
+    category: "Gabi Netela",
+    price: 3600,
+    stock: 3,
+    image: shopGabi10,
+    description: "ጋቢ ነጠላ — premium netela with rich tilet chevron pattern.",
+  },
+  {
+    id: "cross-set-01",
+    name: "የመስቀል ስብስብ — Crucifix Gift Set",
+    category: "Crosses",
+    price: 4500,
+    stock: 6,
+    image: shopCrossSet,
+    description: "የመስቀል ስብስብ — boxed crucifix with gold-tone censer base.",
+  },
+  {
+    id: "cross-proc-01",
+    name: "የእጅ መስቀል — Processional Cross",
+    category: "Crosses",
+    price: 8500,
+    stock: 2,
+    image: shopProcessionalCross,
+    description: "የእጅ መስቀል — large gold-tone Ethiopian processional cross.",
+  },
+  {
+    id: "icon-russian-01",
+    name: "የራሺያ ሥእል — Diptych Icon",
+    category: "የራሺያ ሥእሎች",
+    price: 5200,
+    stock: 4,
+    image: shopRussianIcons,
+    description: "የራሺያ ሥእል — silver-plated diptych icon of Christ and Theotokos.",
+  },
+  {
+    id: "saint-set-01",
+    name: "አቡነ ኪሮስ — Saint Set",
+    category: "Books",
+    price: 1800,
+    stock: 8,
+    image: shopSaintSet,
+    description: "አቡነ ኪሮስ — icon, gadl book and prayer beads gift set.",
+  },
+  {
+    id: "robe-01",
+    name: "ቀሚስ — Black Liturgical Robe",
+    category: "Vestments",
+    price: 4200,
+    stock: 5,
+    image: shopRobe,
+    description: "ቀሚስ — flowing black liturgical robe with gold clasp.",
   },
 ];
 
