@@ -22,6 +22,16 @@ import shopRussianIcons from "@/assets/shop-russian-icons.jpg";
 import shopProcessionalCross from "@/assets/shop-processional-cross.jpg";
 import shopSaintSet from "@/assets/shop-saint-set.jpg";
 import shopRobe from "@/assets/shop-robe.jpg";
+import vestCapeCream from "@/assets/vestment-cape-cream.jpg";
+import vestCapeWhite from "@/assets/vestment-cape-white.jpg";
+import vestCapeGoldClasp from "@/assets/vestment-cape-gold-clasp.jpg";
+import netelaBlueTibeb from "@/assets/netela-blue-tibeb.jpg";
+import vestSilverCross from "@/assets/vestment-silver-cross.jpg";
+import vestFurCape from "@/assets/vestment-fur-cape.jpg";
+import vestGoldEmb from "@/assets/vestment-gold-embroidered.jpg";
+import vestBlackEmb from "@/assets/vestment-black-embroidered.jpg";
+import vestBridalGown from "@/assets/vestment-bridal-gown.jpg";
+import giftSetAbuqelemsis from "@/assets/gift-set-abuqelemsis.jpg";
 
 export type Product = {
   id: string;
@@ -36,7 +46,7 @@ export type Product = {
 export const products: Product[] = [
   {
     id: "item-01",
-    name: "Item 1",
+    name: "የእመቤታችን ሥእል — Theotokos Scroll",
     category: "የራሺያ ሥእሎች",
     price: 1500,
     stock: 10,
@@ -45,7 +55,7 @@ export const products: Product[] = [
   },
   {
     id: "item-02",
-    name: "Item 2",
+    name: "የመድኃኔዓለም ሥእል — Christ Pantocrator",
     category: "የራሺያ ሥእሎች",
     price: 1400,
     stock: 10,
@@ -54,7 +64,7 @@ export const products: Product[] = [
   },
   {
     id: "item-03",
-    name: "Item 3",
+    name: "የቅዱስ ጊዮርጊስ ሥእል — St. George Icon",
     category: "የራሺያ ሥእሎች",
     price: 1600,
     stock: 8,
@@ -63,7 +73,7 @@ export const products: Product[] = [
   },
   {
     id: "item-04",
-    name: "Item 4",
+    name: "የእንጨት መስቀል — Wooden Hand Cross",
     category: "Crosses",
     price: 900,
     stock: 12,
@@ -72,7 +82,7 @@ export const products: Product[] = [
   },
   {
     id: "item-05",
-    name: "Item 5",
+    name: "የብረት መስቀል — Standing Crucifix",
     category: "Crosses",
     price: 2200,
     stock: 6,
@@ -81,7 +91,7 @@ export const products: Product[] = [
   },
   {
     id: "item-06",
-    name: "Item 6",
+    name: "የእንጨት መጽሐፍ ቅዱስ — Engraved Bible Set",
     category: "Books",
     price: 2500,
     stock: 5,
@@ -90,7 +100,7 @@ export const products: Product[] = [
   },
   {
     id: "item-07",
-    name: "Item 7",
+    name: "ወንጌል ቅዱስ — Holy Gospel",
     category: "Books",
     price: 2300,
     stock: 5,
@@ -99,7 +109,7 @@ export const products: Product[] = [
   },
   {
     id: "item-08",
-    name: "Item 8",
+    name: "ድጓ መጽሐፍ — Deggua Hymn Book",
     category: "Books",
     price: 2400,
     stock: 5,
@@ -108,7 +118,7 @@ export const products: Product[] = [
   },
   {
     id: "item-09",
-    name: "Item 9",
+    name: "የበዓል ሥጦታ — Festival Gift Bundle",
     category: "Gift Sets",
     price: 3500,
     stock: 4,
@@ -117,7 +127,7 @@ export const products: Product[] = [
   },
   {
     id: "item-10",
-    name: "Item 10",
+    name: "የጥምቀት ሥጦታ — Timket Gift Box",
     category: "Gift Sets",
     price: 3200,
     stock: 4,
@@ -215,6 +225,15 @@ export const products: Product[] = [
     description: "ጋቢ ነጠላ — premium netela with rich tilet chevron pattern.",
   },
   {
+    id: "gabi-11",
+    name: "ጋቢ ነጠላ — Blue Diamond Tibeb",
+    category: "Gabi Netela",
+    price: 2950,
+    stock: 6,
+    image: netelaBlueTibeb,
+    description: "ጋቢ ነጠላ — handwoven netela with deep blue diamond tibeb border.",
+  },
+  {
     id: "cross-set-01",
     name: "የመስቀል ስብስብ — Crucifix Gift Set",
     category: "Crosses",
@@ -251,6 +270,15 @@ export const products: Product[] = [
     description: "አቡነ ኪሮስ — icon, gadl book and prayer beads gift set.",
   },
   {
+    id: "gift-abuqelemsis-01",
+    name: "የአቡቀለምሲስ ሥጦታ — Abuqelemsis Bundle",
+    category: "Gift Sets",
+    price: 2600,
+    stock: 6,
+    image: giftSetAbuqelemsis,
+    description: "የአቡቀለምሲስ ሥጦታ — spiritual books with handwoven netela in gift box.",
+  },
+  {
     id: "robe-01",
     name: "ቀሚስ — Black Liturgical Robe",
     category: "Vestments",
@@ -258,6 +286,78 @@ export const products: Product[] = [
     stock: 5,
     image: shopRobe,
     description: "ቀሚስ — flowing black liturgical robe with gold clasp.",
+  },
+  {
+    id: "vest-01",
+    name: "ቀሚስ — Cream Cape Vestment",
+    category: "Vestments",
+    price: 3800,
+    stock: 4,
+    image: vestCapeCream,
+    description: "ቀሚስ — flowing cream liturgical cape with gold clasp.",
+  },
+  {
+    id: "vest-02",
+    name: "ቀሚስ — White Cape Vestment",
+    category: "Vestments",
+    price: 3900,
+    stock: 4,
+    image: vestCapeWhite,
+    description: "ቀሚስ — pure white liturgical cape with gold beaded clasp.",
+  },
+  {
+    id: "vest-03",
+    name: "ቀሚስ — Gold Clasp Cape",
+    category: "Vestments",
+    price: 4100,
+    stock: 3,
+    image: vestCapeGoldClasp,
+    description: "ቀሚስ — white cape vestment with chained gold clasp detail.",
+  },
+  {
+    id: "vest-04",
+    name: "ቀሚስ — Silver Cross Tunic",
+    category: "Vestments",
+    price: 4600,
+    stock: 4,
+    image: vestSilverCross,
+    description: "ቀሚስ — white tunic and shawl set with silver cross embroidery.",
+  },
+  {
+    id: "vest-05",
+    name: "ቀሚስ — Fur Collar Cape",
+    category: "Vestments",
+    price: 5200,
+    stock: 3,
+    image: vestFurCape,
+    description: "ቀሚስ — soft white cape vestment with plush fur collar.",
+  },
+  {
+    id: "vest-06",
+    name: "ቀሚስ — Gold Embroidered Robe",
+    category: "Vestments",
+    price: 5400,
+    stock: 3,
+    image: vestGoldEmb,
+    description: "ቀሚስ — white liturgical robe with intricate gold cross embroidery.",
+  },
+  {
+    id: "vest-07",
+    name: "ቀሚስ — Black Embroidered Robe",
+    category: "Vestments",
+    price: 5000,
+    stock: 4,
+    image: vestBlackEmb,
+    description: "ቀሚስ — black liturgical robe with gold and red cross embroidery.",
+  },
+  {
+    id: "vest-08",
+    name: "ቀሚስ — Bridal Habesha Gown",
+    category: "Vestments",
+    price: 6800,
+    stock: 2,
+    image: vestBridalGown,
+    description: "ቀሚስ — silver-trimmed Habesha bridal gown with cross motifs.",
   },
 ];
 
