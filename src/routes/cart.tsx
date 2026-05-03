@@ -3,7 +3,7 @@ import { Minus, Plus, Trash2, ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-store";
-import { formatPrice } from "@/lib/products";
+
 
 export const Route = createFileRoute("/cart")({
   head: () => ({
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/cart")({
 function CartPage() {
   const [hydrated, setHydrated] = useState(false);
   const items = useCart((s) => s.items);
-  const subtotal = useCart((s) => s.subtotal());
+  
   const setQuantity = useCart((s) => s.setQuantity);
   const remove = useCart((s) => s.remove);
 
@@ -58,9 +58,6 @@ function CartPage() {
                 />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-display text-base text-foreground truncate">{item.name}</h3>
-                  <p className="mt-1 text-sm font-semibold text-foreground">
-                    {formatPrice(item.price)}
-                  </p>
                   <div className="mt-2 inline-flex items-center rounded-full border border-border">
                     <button
                       onClick={() => setQuantity(item.id, item.quantity - 1)}
@@ -86,9 +83,6 @@ function CartPage() {
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-3">
-                  <p className="font-semibold text-foreground">
-                    {formatPrice(item.price * item.quantity)}
-                  </p>
                   <button
                     onClick={() => remove(item.id)}
                     aria-label="Remove"
@@ -103,13 +97,7 @@ function CartPage() {
         </div>
 
         <div className="rounded-2xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Subtotal</span>
-            <span className="font-display text-2xl font-bold text-foreground">
-              {formatPrice(subtotal)}
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">Shipping calculated at checkout</p>
+          <p className="text-sm text-muted-foreground">Shipping calculated at checkout</p>
 
           <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Link
