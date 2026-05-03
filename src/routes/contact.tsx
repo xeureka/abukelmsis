@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Send, Facebook } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -124,10 +124,28 @@ function Contact() {
               <p className="text-xs uppercase tracking-[0.25em] text-accent">
                 Follow our journey
               </p>
-              <div className="mt-3 flex gap-6 text-sm text-foreground">
-                <a href="#" className="hover:text-accent">Instagram</a>
-                <a href="#" className="hover:text-accent">Telegram</a>
-                <a href="#" className="hover:text-accent">Facebook</a>
+              <div className="mt-3 flex gap-3">
+                <a
+                  href="#"
+                  aria-label="Instagram"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
+                >
+                  <Instagram className="h-4 w-4" />
+                </a>
+                <a
+                  href="#"
+                  aria-label="Telegram"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
+                >
+                  <Send className="h-4 w-4" />
+                </a>
+                <a
+                  href="#"
+                  aria-label="Facebook"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
+                >
+                  <Facebook className="h-4 w-4" />
+                </a>
               </div>
             </div>
           </div>
