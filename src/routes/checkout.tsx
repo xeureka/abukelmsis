@@ -111,18 +111,9 @@ function CheckoutPage() {
                 <span className="text-muted-foreground">
                   {item.name} × {item.quantity}
                 </span>
-                <span className="font-medium text-foreground">
-                  {formatPrice(item.price * item.quantity)}
-                </span>
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
-            <span className="font-semibold text-foreground">Total</span>
-            <span className="font-display text-xl font-bold text-foreground">
-              {formatPrice(subtotal)}
-            </span>
-          </div>
         </div>
 
         <button
@@ -130,7 +121,7 @@ function CheckoutPage() {
           disabled={processing}
           className="w-full rounded-full bg-primary py-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent disabled:opacity-60"
         >
-          {processing ? "Processing…" : `Place Order — ${formatPrice(subtotal)}`}
+          {processing ? "Processing…" : "Place Order"}
         </button>
       </form>
     </section>
