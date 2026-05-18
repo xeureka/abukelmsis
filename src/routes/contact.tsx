@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Mail, Phone, MapPin, Instagram, Send, Facebook } from "lucide-react";
+import { Phone, MapPin, Instagram, Send, Facebook } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -10,32 +10,32 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact — አቡቀለምሲስ" },
       {
         name: "description",
-        content:
-          "Get in touch with አቡቀለምሲስ. Have a question about a product or order? We are here to help.",
-      },
-      { property: "og:title", content: "Contact — አቡቀለምሲስ" },
-      {
-        property: "og:description",
-        content: "Get in touch with አቡቀለምሲስ.",
+        content: "Get in touch with አቡቀለምሲስ via our Telegram bot.",
       },
     ],
   }),
   component: Contact,
 });
 
+// Added phone to the schema
 const schema = z.object({
   name: z.string().trim().min(1, "Please share your name").max(100),
-  email: z.string().trim().email("That email looks off").max(255),
+  phone: z.string().trim().min(10, "Please enter a valid phone number"),
   message: z.string().trim().min(5, "A few more words, please").max(1000),
 });
 
 function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSending, setIsSending] = useState(false);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const BOT_TOKEN = "8586820552:AAHGOzry8APmtHoAFLy0SNdHOn8Wv3-naRM";
+  const CHAT_ID = "1951892460";
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = schema.safeParse(form);
+
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       for (const issue of result.error.issues) {
@@ -44,9 +44,40 @@ function Contact() {
       setErrors(fieldErrors);
       return;
     }
+
+    setIsSending(true);
     setErrors({});
-    setForm({ name: "", email: "", message: "" });
-    toast.success("Message received — we'll write back shortly.");
+
+    // Updated template with Phone
+    const telegramMessage = `
+🔔 *New Contact Form Submission*
+👤 *Name:* ${form.name}
+📞 *Phone:* ${form.phone}
+📝 *Message:* ${form.message}
+    `;
+
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: telegramMessage,
+          parse_mode: "Markdown",
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Message sent to our Telegram!");
+        setForm({ name: "", phone: "", message: "" });
+      } else {
+        throw new Error();
+      }
+    } catch (error) {
+      toast.error("Failed to send. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -55,13 +86,8 @@ function Contact() {
         <h1 className="font-display text-5xl font-bold text-foreground md:text-6xl">
           Get in <span className="text-accent">Touch</span>
         </h1>
-        <p className="mt-4 max-w-xl text-sm text-muted-foreground md:text-base">
-          Have a question about a product or an order? We are here to help. Send us
-          a message and we will get back to you within 24 hours.
-        </p>
 
         <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2">
-          {/* Form card */}
           <form
             onSubmit={onSubmit}
             className="rounded-lg border border-border bg-card p-8 shadow-soft"
@@ -70,83 +96,61 @@ function Contact() {
               <input
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="አቡቀለምሲስ"
-                className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                placeholder="Abukelemsis"
+                className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary"
               />
             </Field>
+
             <div className="h-5" />
-            <Field label="Email Address" error={errors.email}>
+
+            {/* NEW: Phone Number Field */}
+            <Field label="Phone Number" error={errors.phone}>
               <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder="abukelemsis@gmail.com"
-                className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                type="tel"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                placeholder="+2519..."
+                className="w-full rounded-md border border-border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary"
               />
             </Field>
+
             <div className="h-5" />
+
             <Field label="Message" error={errors.message}>
               <textarea
-                rows={5}
+                rows={4}
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 placeholder="How can we help you?"
-                className="w-full resize-none rounded-md border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                className="w-full resize-none rounded-md border border-border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary"
               />
             </Field>
+
             <button
               type="submit"
-              className="mt-6 w-full rounded-md bg-accent py-3 text-sm font-medium text-accent-foreground transition-colors hover:bg-primary"
+              disabled={isSending}
+              className="mt-6 w-full rounded-md bg-accent py-3 text-sm font-medium text-accent-foreground transition-colors hover:bg-primary disabled:opacity-50"
             >
-              Send Message
+              {isSending ? "Sending..." : "Send message"}
             </button>
           </form>
 
-          {/* Info column */}
           <div className="space-y-8">
             <InfoRow
-              icon={<Mail className="h-5 w-5" />}
-              title="Email Us"
-              value="abukelemsis@gmail.com"
-            />
-            <InfoRow
               icon={<Phone className="h-5 w-5" />}
-              title="Call Us"
+              title="Call Us Directly"
               value="0963469973 · 0973133334"
             />
             <InfoRow
               icon={<MapPin className="h-5 w-5" />}
               title="Visit Us"
-              value="ስታዲየም ቤተዛታ ሆስፒታል ጀርባ — Addis Ababa"
+              value="ልደታ ፍርድ ቤት ፊት ለፊት ፖስት የገበያ ማዕከል 2ተኛ ፎቅ (ቁጥር 222)"
             />
-
-            <div className="border-t border-border pt-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-accent">
-                Follow our journey
+            <div className="rounded-xl bg-accent/5 p-6 border border-accent/10">
+              <p className="text-sm font-medium text-accent">Quick Tip</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                We usually respond within 4-5 hours on Telegram during business hours.
               </p>
-              <div className="mt-3 flex gap-3">
-                <a
-                  href="#"
-                  aria-label="Instagram"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
-                >
-                  <Instagram className="h-4 w-4" />
-                </a>
-                <a
-                  href="#"
-                  aria-label="Telegram"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
-                >
-                  <Send className="h-4 w-4" />
-                </a>
-                <a
-                  href="#"
-                  aria-label="Facebook"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent"
-                >
-                  <Facebook className="h-4 w-4" />
-                </a>
-              </div>
             </div>
           </div>
         </div>
@@ -155,28 +159,7 @@ function Contact() {
   );
 }
 
-function InfoRow({
-  icon,
-  title,
-  value,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-start gap-4">
-      <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-border bg-card text-accent">
-        {icon}
-      </div>
-      <div>
-        <p className="font-medium text-foreground">{title}</p>
-        <p className="mt-1 text-sm text-muted-foreground">{value}</p>
-      </div>
-    </div>
-  );
-}
-
+// Helper components (Field, InfoRow) remain as they were in your previous version.
 function Field({
   label,
   error,
@@ -188,11 +171,23 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-xs font-medium text-foreground">
-        {label}
-      </label>
+      <label className="mb-2 block text-xs font-medium text-foreground">{label}</label>
       {children}
       {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
+    </div>
+  );
+}
+
+function InfoRow({ icon, title, value }: { icon: React.ReactNode; title: string; value: string }) {
+  return (
+    <div className="flex items-start gap-4">
+      <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full border border-border bg-card text-accent">
+        {icon}
+      </div>
+      <div>
+        <p className="font-medium text-foreground">{title}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{value}</p>
+      </div>
     </div>
   );
 }

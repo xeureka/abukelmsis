@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import heroImg from "@/assets/hero.jpg";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/lib/products";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -9,8 +10,7 @@ export const Route = createFileRoute("/")({
       { title: "አቡቀለምሲስ — መንፈሳዊ መጽሐፍት እና ስጦታዎች" },
       {
         name: "description",
-        content:
-          "አቡቀለምሲስ — መንፈሳዊ መጽሐፍት እና ስጦታዎች ጥቅል። ጥራት መለያችን።",
+        content: "አቡቀለምሲስ — የጥበብ እና የመንፈሳዊነት መገኛ። ጥራት መለያችን።",
       },
       { property: "og:title", content: "አቡቀለምሲስ — መንፈሳዊ መጽሐፍት እና ስጦታዎች" },
       {
@@ -18,113 +18,127 @@ export const Route = createFileRoute("/")({
         content: "ጥራት መለያችን። ፍጥነት እና ታማኝነት ዘውትር የምንመሰገንበት ነው።",
       },
       { property: "og:image", content: heroImg },
-      { name: "twitter:image", content: heroImg },
     ],
   }),
   component: Home,
 });
 
+// Animation Variants
+const fadeInUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+};
+
+const staggerContainer = {
+  animate: { transition: { staggerChildren: 0.2 } },
+};
+
 function Home() {
-  const pickYourPreference = products.slice(0, 8);
-  const handpicked = products.slice(0, 4);
+  // Logic Fix: slice(0, 8) gets the first 8 products. 
+  // We remove the second 'handpicked' section entirely to omit the last row duplication.
+  const displayedProducts = products.slice(0, 8);
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 py-16 md:grid-cols-2 md:py-24">
-          <div className="flex flex-col justify-center">
-            <h1 className="font-display text-5xl font-bold leading-[1.05] md:text-7xl">
-              <span className="text-foreground">Shop </span>
-              <span className="text-accent">መንፈሳዊ መጽሐፍት እና ስጦታዎች</span>
-              <span className="block text-foreground">Shop <span className="text-accent">አቡቀለምሲስ</span></span>
-            </h1>
-            <p className="mt-6 max-w-md text-base text-muted-foreground">
-              መንፈሳዊ መጽሐፍት እና ስጦታዎች — quality, speed and trust, every time.
-            </p>
-            <div className="mt-8">
+      {/* --- MODERN HERO SECTION --- */}
+      <section className="relative overflow-hidden bg-background">
+        <div className="absolute inset-0 -z-10 opacity-30">
+          <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-accent/10 blur-[120px]" />
+        </div>
+
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 py-20 md:grid-cols-2 md:py-32">
+          <motion.div 
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+            className="flex flex-col justify-center"
+          >
+            <motion.span variants={fadeInUp} className="mb-4 text-xs font-bold uppercase tracking-[0.4em] text-accent">
+              Established Excellence
+            </motion.span>
+            <motion.h1 variants={fadeInUp} className="font-display text-6xl font-bold leading-[1.1] md:text-8xl">
+              <span className="text-foreground">Discover </span>
+              <span className="text-gradient-silver italic">አቡቀለምሲስ</span>
+            </motion.h1>
+            <motion.p variants={fadeInUp} className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground">
+              ጥራት መለያችን✨<br />
+              ፍጥነት እና ታማኝነት ዘውትር የምንመሰገንበት ነው 🎁 <br />
+              ይመርጡናል እንጂ አያወዳድሩንም✨
+            </motion.p>
+            <motion.div variants={fadeInUp} className="mt-10 flex items-center gap-6">
               <Link
                 to="/shop"
-                className="inline-flex items-center rounded-full border border-border bg-card px-8 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+                className="rounded-full bg-primary px-10 py-4 text-sm font-semibold text-primary-foreground shadow-elegant hover:scale-105 transition-transform"
               >
-                Shop Now
+                Explore Collection
               </Link>
-            </div>
-          </div>
+              <div className="h-[1px] w-12 bg-border" />
+            </motion.div>
+          </motion.div>
 
-          <div className="relative">
-            <div className="aspect-[4/5] overflow-hidden rounded-lg shadow-elegant">
-              <img
-                src={heroImg}
-                alt="አቡቀለምሲስ — መንፈሳዊ መጽሐፍት እና ስጦታዎች"
-                width={1600}
-                height={1200}
-                className="h-full w-full object-cover"
-              />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="relative flex justify-center"
+          >
+            <div className="relative aspect-square w-full max-w-[450px]">
+              <div className="absolute inset-0 animate-pulse rounded-full border border-accent/20" />
+              <div className="h-full w-full overflow-hidden rounded-full border-8 border-card shadow-2xl">
+                <img src={heroImg} className="h-full w-full object-cover scale-110 hover:scale-100 transition-transform duration-[2s]" alt="Legacy Collection" />
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Contact strip */}
-      <section className="border-y border-border/60 bg-primary py-6 text-primary-foreground">
-        <div className="mx-auto max-w-7xl space-y-2 px-6 text-center text-sm leading-relaxed">
-          <p>
-            ማንኛውንም መንፈሳዊ ስጦታዎችን 🔔 ለወዳጅ ዘመድዎ ለመስጠት ሲያስቡ በዚህ ይደውሉ እና
-            ያናግሩን 🔔
-          </p>
-          <p className="font-display text-xl tracking-wide">0963469973 · 0973133334</p>
-        </div>
-      </section>
-
-      {/* Pick Your Preference */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mb-14 flex items-end justify-between gap-6">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-              For you
+      {/* --- ADVANCED CONTACT STRIP --- */}
+      <section className="bg-primary py-8 text-primary-foreground">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <p className="text-center font-light tracking-wide md:text-left">
+              ለወዳጅ ዘመድዎ የሚሆን ልዩ መንፈሳዊ ስጦታዎችን ለማዘዝ ዝግጁ ነን።
             </p>
-            <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">
-              Pick Your Preference
+            <div className="flex items-center gap-8 font-display text-2xl font-medium tracking-tighter">
+              <a href="tel:0963469973" className="hover:text-accent transition-colors">0963 46 99 73</a>
+              <span className="opacity-30">|</span>
+              <a href="tel:0973133334" className="hover:text-accent transition-colors">0973 13 33 34</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- REFINED PRODUCT GRIDS --- */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16 flex items-end justify-between border-b border-border pb-8"
+        >
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-accent">Soulful Selects</span>
+            <h2 className="mt-2 font-display text-4xl font-bold text-primary md:text-5xl">
+              Chosen for your Spirit
             </h2>
           </div>
-          <Link
-            to="/shop"
-            className="hidden text-xs uppercase tracking-[0.2em] text-foreground underline-offset-4 hover:underline md:inline"
-          >
-            View all →
+          <Link to="/shop" className="group hidden text-xs font-bold uppercase tracking-widest text-foreground md:block">
+            View full gallery <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
           </Link>
-        </div>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-          {pickYourPreference.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
-      </section>
+        </motion.div>
 
-      {/* Handpicked for You */}
-      <section className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="mb-14">
-          <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            Curated
-          </p>
-          <h2 className="mt-3 font-display text-4xl text-primary md:text-5xl">
-            Handpicked for You
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-          {handpicked.map((p) => (
-            <ProductCard key={p.id} product={p} />
+        <div className="grid grid-cols-1 gap-x-10 gap-y-20 sm:grid-cols-2 lg:grid-cols-4">
+          {displayedProducts.map((p, i) => (
+            <motion.div 
+              key={p.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <ProductCard product={p} />
+            </motion.div>
           ))}
-        </div>
-
-        <div className="mt-14 text-center md:hidden">
-          <Link
-            to="/shop"
-            className="inline-flex items-center rounded-sm border border-border px-8 py-3 text-xs uppercase tracking-[0.2em] text-foreground transition-colors hover:border-primary hover:text-primary"
-          >
-            View all
-          </Link>
         </div>
       </section>
     </>

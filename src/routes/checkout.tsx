@@ -3,13 +3,17 @@ import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-store";
+import { formatPrice } from "@/lib/products"; // Import the formatter
 
+// Configuration
+const BOT_TOKEN = "8586820552:AAHGOzry8APmtHoAFLy0SNdHOn8Wv3-naRM";
+const CHAT_ID = "1951892460";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
       { title: "Checkout — አቡቀለምሲስ" },
-      { name: "description", content: "Complete your order." },
+      { name: "description", content: "Complete your order via Telegram." },
     ],
   }),
   component: CheckoutPage,
@@ -19,13 +23,15 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const [hydrated, setHydrated] = useState(false);
   const items = useCart((s) => s.items);
-  
   const clear = useCart((s) => s.clear);
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [processing, setProcessing] = useState(false);
+
+  // Calculate total price
+  const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   useEffect(() => setHydrated(true), []);
 
@@ -44,15 +50,64 @@ function CheckoutPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !address) {
+    if (!name || !phone || !address) {
       toast.error("Please fill in all fields");
       return;
     }
+
     setProcessing(true);
-    await new Promise((r) => setTimeout(r, 900));
-    clear();
-    toast.success("Order placed");
-    navigate({ to: "/checkout/success" });
+
+    // Added price per line item in Telegram
+    const itemList = items
+      .map(
+        (item) =>
+          `▪️ ${item.name} (x${item.quantity}) - ${formatPrice(item.price * item.quantity)}`,
+      )
+      .join("\n");
+
+    const telegramMessage = `
+🚀 **New Order: Abuqelemsis Gifts**
+----------------------------
+👤 **Customer:** ${name}
+📞 **Phone:** ${phone}
+📍 **Address:** ${address}
+
+📦 **Items:**
+${itemList}
+
+💰 **Total Amount:** ${formatPrice(totalAmount)}
+----------------------------
+    `;
+
+    try {
+      const response = await fetch(
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: telegramMessage,
+            parse_mode: "Markdown",
+          }),
+        },
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.description || "Failed to send");
+      }
+
+      clear();
+      toast.success("Order sent to @AbuqelemsisGifts_bot!");
+      navigate({ to: "/checkout/success" });
+    } catch (error: any) {
+      console.error("Telegram Error:", error);
+      toast.error(`Error: ${error.message}`);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
@@ -68,36 +123,35 @@ function CheckoutPage() {
 
       <form onSubmit={onSubmit} className="mt-8 space-y-4">
         <div className="rounded-2xl border border-border bg-card p-6">
-          <h2 className="font-display text-lg font-semibold text-foreground">Shipping Details</h2>
-
+          <h2 className="font-display text-lg font-semibold text-foreground">Delivery Details</h2>
           <div className="mt-4 space-y-4">
             <div>
               <label className="text-sm font-medium text-foreground">Full Name</label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
-                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                placeholder="Enter your name"
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">Email</label>
+              <label className="text-sm font-medium text-foreground">Phone Number</label>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="john@example.com"
-                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+2519..."
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">Shipping Address</label>
+              <label className="text-sm font-medium text-foreground">Delivery Address</label>
               <textarea
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="123 Main St, City, Country"
+                placeholder="Addis Ababa, Ethiopia..."
                 rows={3}
-                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
           </div>
@@ -105,15 +159,23 @@ function CheckoutPage() {
 
         <div className="rounded-2xl border border-border bg-card p-6">
           <h2 className="font-display text-lg font-semibold text-foreground">Order Summary</h2>
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-4 space-y-2 border-b border-border pb-4">
             {items.map((item) => (
-              <li key={item.id} className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
+              <li key={item.id} className="flex justify-between text-sm text-muted-foreground">
+                <span>
                   {item.name} × {item.quantity}
+                </span>
+                <span className="text-foreground font-medium">
+                  {formatPrice(item.price * item.quantity)}
                 </span>
               </li>
             ))}
           </ul>
+          {/* Total display in UI */}
+          <div className="mt-4 flex justify-between items-center">
+            <span className="text-sm font-semibold text-foreground">Total</span>
+            <span className="text-lg font-bold text-accent">{formatPrice(totalAmount)}</span>
+          </div>
         </div>
 
         <button
@@ -121,7 +183,7 @@ function CheckoutPage() {
           disabled={processing}
           className="w-full rounded-full bg-primary py-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent disabled:opacity-60"
         >
-          {processing ? "Processing…" : "Place Order"}
+          {processing ? "Sending Order..." : `Send Order — ${formatPrice(totalAmount)}`}
         </button>
       </form>
     </section>

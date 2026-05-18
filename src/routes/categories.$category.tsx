@@ -1,69 +1,59 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/lib/products";
+import { ProductCard } from "@/components/ProductCard";
 
 export const Route = createFileRoute("/categories/$category")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${decodeURIComponent(params.category)} — አቡቀለምሲስ` },
-      {
-        name: "description",
-        content: `Browse ${decodeURIComponent(params.category)} items at Abukelemsis.`,
-      },
-      {
-        property: "og:title",
-        content: `${decodeURIComponent(params.category)} — አቡቀለምሲስ`,
-      },
-    ],
-  }),
   component: CategoryDetailPage,
-  notFoundComponent: () => (
-    <div className="mx-auto max-w-3xl px-6 py-24 text-center">
-      <h1 className="font-display text-4xl text-foreground">Category not found</h1>
-      <Link
-        to="/categories"
-        className="mt-6 inline-block text-sm uppercase tracking-[0.2em] text-accent hover:underline"
-      >
-        Back to categories
-      </Link>
-    </div>
-  ),
 });
 
 function CategoryDetailPage() {
   const { category } = Route.useParams();
-  const decoded = decodeURIComponent(category);
 
-  const items = useMemo(
-    () => products.filter((p) => p.category === decoded),
-    [decoded],
-  );
+  // 2. Critical Fix: Double decoding and strict trimming
+  // Sometimes routers encode characters twice (e.g., % becomes %25)
+  const decodedCategory = useMemo(() => {
+    try {
+      return decodeURIComponent(category).trim();
+    } catch (e) {
+      return category.trim();
+    }
+  }, [category]);
 
-  if (items.length === 0) throw notFound();
+  // 3. Robust Filtering
+  // We trim BOTH sides to ensure a hidden space in products.ts doesn't break the match
+  const filteredItems = useMemo(() => {
+    return products.filter((p) => {
+      const productCat = p.category ? p.category.trim() : "";
+      return productCat === decodedCategory;
+    });
+  }, [decodedCategory]);
+
+  // 4. Handle Not Found
+  if (filteredItems.length === 0) {
+    // Log to console so you can see what actually failed
+    console.error("No products found for category:", decodedCategory);
+    throw notFound();
+  }
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16">
-      <div className="mb-10 flex items-center justify-between gap-4">
-        <div>
-          <Link
-            to="/categories"
-            className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground hover:text-accent"
-          >
-            ← All categories
-          </Link>
-          <h1 className="mt-3 font-display text-4xl font-bold text-foreground md:text-5xl">
-            {decoded}
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {items.length} item{items.length === 1 ? "" : "s"}
-          </p>
-        </div>
+      <div className="mb-12">
+        <Link
+          to="/categories"
+          className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors"
+        >
+          ← Back to All Categories
+        </Link>
+        <h1 className="mt-4 font-display text-4xl font-bold text-foreground md:text-5xl">
+          {decodedCategory}
+        </h1>
+        <p className="mt-2 text-muted-foreground">Showing {filteredItems.length} items</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map((p) => (
-          <ProductCard key={p.id} product={p} />
+      <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+        {filteredItems.map((product) => (
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </section>

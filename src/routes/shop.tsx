@@ -55,9 +55,7 @@ function ShopPage() {
     <section className="mx-auto max-w-7xl px-6 py-20">
       <div className="mb-12">
         <p className="text-xs uppercase tracking-[0.3em] text-accent">Shop</p>
-        <h1 className="mt-3 font-display text-5xl text-primary md:text-6xl">
-          The collection
-        </h1>
+        <h1 className="mt-3 font-display text-5xl text-primary md:text-6xl">The collection</h1>
       </div>
 
       {/* Filters */}

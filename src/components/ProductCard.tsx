@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-store";
-import { type Product } from "@/lib/products";
+import { type Product, formatPrice } from "@/lib/products"; // Added formatPrice import
 
 export function ProductCard({ product }: { product: Product }) {
   const add = useCart((s) => s.add);
@@ -15,7 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
     <article className="group">
       <div className="relative overflow-hidden rounded-md bg-secondary aspect-square">
         <img
-          src={product.image}
+          src={product.image as string} // Added type cast for safety
           alt={product.name}
           loading="lazy"
           width={800}
@@ -34,6 +34,8 @@ export function ProductCard({ product }: { product: Product }) {
           {product.category}
         </p>
         <h3 className="mt-1 font-display text-xl text-foreground">{product.name}</h3>
+        {/* --- DISPLAY PRICE HERE --- */}
+        <p className="mt-2 text-sm font-medium text-accent">{formatPrice(product.price)}</p>
       </div>
     </article>
   );

@@ -8,12 +8,11 @@ export type CartItem = {
   price: number;
   image: string;
   quantity: number;
-  stock: number;
 };
 
 type CartState = {
   items: CartItem[];
-  add: (product: Product, qty?: number) => { ok: boolean; reason?: string };
+  add: (product: Product, qty?: number) => { ok: boolean };
   remove: (id: string) => void;
   setQuantity: (id: string, qty: number) => void;
   clear: () => void;
@@ -27,15 +26,12 @@ export const useCart = create<CartState>()(
       items: [],
       add: (product, qty = 1) => {
         const existing = get().items.find((i) => i.id === product.id);
-        const nextQty = (existing?.quantity ?? 0) + qty;
-        if (nextQty > product.stock) {
-          return { ok: false, reason: `Only ${product.stock} in stock` };
-        }
+        
         set((state) => {
           if (existing) {
             return {
               items: state.items.map((i) =>
-                i.id === product.id ? { ...i, quantity: nextQty } : i,
+                i.id === product.id ? { ...i, quantity: i.quantity + qty } : i,
               ),
             };
           }
@@ -48,7 +44,6 @@ export const useCart = create<CartState>()(
                 price: product.price,
                 image: product.image,
                 quantity: qty,
-                stock: product.stock,
               },
             ],
           };
@@ -57,14 +52,17 @@ export const useCart = create<CartState>()(
       },
       remove: (id) =>
         set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+
+      // ✅ Unlimited quantity logic
       setQuantity: (id, qty) =>
         set((state) => ({
-          items: state.items
-            .map((i) =>
-              i.id === id ? { ...i, quantity: Math.min(Math.max(1, qty), i.stock) } : i,
-            )
-            .filter((i) => i.quantity > 0),
+          items: state.items.map((i) =>
+            i.id === id 
+              ? { ...i, quantity: Math.max(1, qty) } 
+              : i
+          ),
         })),
+
       clear: () => set({ items: [] }),
       subtotal: () =>
         get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
@@ -74,7 +72,7 @@ export const useCart = create<CartState>()(
       name: "maison-cart",
       storage: createJSONStorage(() =>
         typeof window === "undefined"
-          ? { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+          ? { getItem: () => null, setItem: () => {}, removeItem: () => null }
           : window.localStorage,
       ),
     },
