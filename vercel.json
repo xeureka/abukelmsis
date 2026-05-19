@@ -1,10 +1,19 @@
 {
   "version": 2,
+  "framework": null,
+  "outputDirectory": ".output/static",
   "cleanUrls": true,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/:path((?!.*\\..*).*)",
-      "destination": "/index.html"
+      "src": "/_nitro/(.*)",
+      "dest": "/_nitro/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": ".output/server/index.mjs"
     }
   ]
 }

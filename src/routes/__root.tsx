@@ -35,8 +35,7 @@ export const Route = createRootRoute({
       { title: "አቡቀለምሲስ · Abukelemsis — Books & Creative Gifts" },
       {
         name: "description",
-        content:
-          "አቡቀለምሲስ — a curated shop of books and meaningful, spiritual gifts.",
+        content: "አቡቀለምሲስ — a curated shop of books and meaningful, spiritual gifts.",
       },
       { property: "og:title", content: "አቡቀለምሲስ · Abukelemsis" },
       { property: "og:description", content: "Books and creative gifts, curated with care." },
