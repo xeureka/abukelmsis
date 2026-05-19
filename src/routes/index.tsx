@@ -17,8 +17,10 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "ጥራት መለያችን። ፍጥነት እና ታማኝነት ዘውትር የምንመሰገንበት ነው።",
       },
-      { property: "og:image", content: heroImg },
+      { property: "og:image", content: String(heroImg) },
     ],
+    // High Priority: Tells the browser to load this image BEFORE parsing the rest of the component script
+    links: [{ rel: "preload", href: heroImg, as: "image" }],
   }),
   component: Home,
 });
@@ -60,7 +62,10 @@ function Home() {
               <span className="text-foreground">Discover </span>
               <span className="text-gradient-silver italic">አቡቀለምሲስ</span>
             </motion.h1>
-            <motion.p variants={fadeInUp} className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground">
+            <motion.p
+              variants={fadeInUp}
+              className="mt-8 max-w-md text-lg leading-relaxed text-muted-foreground"
+            >
               ጥራት መለያችን✨<br />
               ፍጥነት እና ታማኝነት ዘውትር የምንመሰገንበት ነው 🎁 <br />
               ይመርጡናል እንጂ አያወዳድሩንም✨
@@ -84,8 +89,15 @@ function Home() {
           >
             <div className="relative aspect-square w-full max-w-[450px]">
               <div className="absolute inset-0 animate-pulse rounded-full border border-accent/20" />
-              <div className="h-full w-full overflow-hidden rounded-full border-8 border-card shadow-2xl">
-                <img src={heroImg} className="h-full w-full object-cover scale-110 hover:scale-100 transition-transform duration-[2s]" alt="Legacy Collection" />
+              {/* Added a subtle background color placeholder during load state */}
+              <div className="h-full w-full overflow-hidden rounded-full border-8 border-card shadow-2xl bg-muted/10">
+                <img
+                  src={heroImg}
+                  className="h-full w-full object-cover transition-transform duration-[2s] hover:scale-105"
+                  alt="አቡቀለምሲስ Legacy Collection"
+                  loading="eager"   // Forces the browser to load it immediately
+                  decoding="async"  // Prevents image decoding from blocking page animations
+                />
               </div>
             </div>
           </motion.div>
