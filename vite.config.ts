@@ -1,25 +1,16 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { nitro } from "nitro/vite";
-import inject from "@rollup/plugin-inject"; // Usually available by default in modern bundler environments
 
 export default defineConfig({
   vite: {
     plugins: [
       nitro({
-        preset: "vercel", 
+        preset: "vercel", // Explicitly bundle for Vercel Serverless rules
       }),
     ],
-    // Force Vite/Rollup to define global React if an optimization step strips it
-    build: {
-      rollupOptions: {
-        plugins: [
-          inject({
-            modules: {
-              React: 'react',
-            },
-          }),
-        ],
-      },
+    define: {
+      // Safely globalizes React to prevent 'React is not defined' crashes in production
+      React: "window.React",
     },
   },
 });
