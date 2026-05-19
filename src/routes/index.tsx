@@ -85,11 +85,7 @@ function Home() {
             <div className="relative aspect-square w-full max-w-[450px]">
               <div className="absolute inset-0 animate-pulse rounded-full border border-accent/20" />
               <div className="h-full w-full overflow-hidden rounded-full border-8 border-card shadow-2xl">
-                <img
-                  src={heroImg}
-                  className="h-full w-full object-cover scale-110 hover:scale-100 transition-transform duration-[2s]"
-                  alt="Legacy Collection"
-                />
+                <img src={heroImg} className="h-full w-full object-cover scale-110 hover:scale-100 transition-transform duration-[2s]" alt="Legacy Collection" />
               </div>
             </div>
           </motion.div>
