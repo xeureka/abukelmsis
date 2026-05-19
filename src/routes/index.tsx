@@ -122,7 +122,10 @@ function Home() {
               Chosen for your Spirit
             </h2>
           </div>
-          <Link to="/shop" className="group hidden text-xs font-bold uppercase tracking-widest text-foreground md:block">
+          <Link
+            to="/shop"
+            className="group hidden text-xs font-bold uppercase tracking-widest text-foreground md:block"
+          >
             View full gallery <span className="inline-block transition-transform group-hover:translate-x-2">→</span>
           </Link>
         </motion.div>
