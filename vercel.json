@@ -1,12 +1,20 @@
 {
   "version": 2,
-  "framework": null,
-  "outputDirectory": ".output/static",
-  "cleanUrls": true,
+  "builds": [
+    {
+      "src": ".output/server/index.mjs",
+      "use": "@vercel/node"
+    },
+    {
+      "src": ".output/static/**",
+      "use": "@vercel/static"
+    }
+  ],
   "routes": [
     {
       "src": "/_nitro/(.*)",
-      "dest": "/_nitro/$1"
+      "dest": ".output/static/_nitro/$1",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" }
     },
     {
       "handle": "filesystem"
